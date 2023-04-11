@@ -19,22 +19,20 @@ set -e
 ##URLS
 
 URL_GOOGLE_CHROME="https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
-URL_4K_VIDEO_DOWNLOADER="https://dl.4kdownload.com/app/4kvideodownloader_4.20.0-1_amd64.deb?source=website"
-URL_INSYNC="https://d2t3ff60b2tol4.cloudfront.net/builds/insync_3.7.2.50318-impish_amd64.deb"
 URL_HYPER="https://releases.hyper.is/download/deb"
 URL_VSCODE="https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-x64"
 URL_OBINS_KIT="https://s3.hexcore.xyz/occ/linux/deb/ObinsKit_1.2.11_x64.deb"
 URL_DISCORD="https://discord.com/api/download?platform=linux&format=deb"
 URL_DOCKER="https://desktop.docker.com/linux/main/amd64/docker-desktop-4.18.0-amd64.deb?utm_source=docker&utm_medium=webreferral&utm_campaign=docs-driven-download-linux-amd64"
 URL_MONGODB_COMPASS="https://downloads.mongodb.com/compass/mongodb-compass_1.36.2_amd64.deb"
-URL_JETBRAINS_TOOLBOX="https://www.jetbrains.com/toolbox-app/download/download-thanks.html?platform=linux"
+URL_JETBRAINS_TOOLBOX="https://download.jetbrains.com/toolbox/jetbrains-toolbox-1.27.3.14493.tar.gz?_gl=1*3xh49u*_ga*MTY0OTMxMjE1OC4xNjgxMTc5MDg3*_ga_9J976DJZ68*MTY4MTE3OTA4Ni4xLjEuMTY4MTE3OTEwMS42MC4wLjA."
 URL_MINT_WEB_APPS="http://packages.linuxmint.com/pool/main/w/webapp-manager/webapp-manager_1.2.8_all.deb"
 ##URL_STUDIO3T=""
 
 ##DIRETÓRIOS E ARQUIVOS
 
-DIRETORIO_DOWNLOADS="$HOME/Downloads/programas"
-DIRETORIO_OTHER_DOWNLOADS="$HOME/Downloads/ManualInstallPrograms"
+DIRETORIO_DOWNLOADS="/home/felipealz/Downloads/Programas"
+DIRETORIO_OTHER_DOWNLOADS="/home/felipealz/Downloads/ManualInstallPrograms"
 
 #CORES
 
@@ -66,22 +64,10 @@ fi
 
 # ------------------------------------------------------------------------------ #
 
-
-## Removendo travas eventuais do apt ##
-travas_apt(){
-  sudo rm /var/lib/dpkg/lock-frontend
-  sudo rm /var/cache/apt/archives/lock
-}
-
-## Adicionando/Confirmando arquitetura de 32 bits ##
-add_archi386(){
-sudo dpkg --add-architecture i386
-}
-
 ## Add TLP
-add_tlp() {
-sudo add-apt-repository ppa:linrunner/tlp -y
-}
+##add_tlp() {
+##sudo add-apt-repository ppa:linrunner/tlp -y
+##}
 
 ## Atualizando o repositório ##
 just_apt_update(){
@@ -96,11 +82,8 @@ PROGRAMAS_PARA_INSTALAR=(
   snapd
   winff
   virtualbox
-  gparted
-  timeshift
   gufw
   synaptic
-  solaar
   vlc
   gnome-sushi 
   folder-color
@@ -111,12 +94,9 @@ PROGRAMAS_PARA_INSTALAR=(
   dconf-editor
   zsh
   cheese
-  gnome-tweak-tool
   gnome-tweaks
   gnome-shell-extensions
   dia
-  gir1.2-gda-5.0 
-  gir1.2-gsound-1.0
   #tlp
   #tlp-rdw
 )
@@ -130,11 +110,10 @@ install_debs(){
 echo -e "${VERDE}[INFO] - Baixando pacotes .deb${SEM_COR}"
 
 mkdir "$DIRETORIO_DOWNLOADS"
+mkdir "$DIRETORIO_OTHER_DOWNLOADS"
+
 wget -c "$URL_GOOGLE_CHROME"       -P "$DIRETORIO_DOWNLOADS"
-wget -c "$URL_4K_VIDEO_DOWNLOADER" -P "$DIRETORIO_DOWNLOADS"
-wget -c "$URL_INSYNC"              -P "$DIRETORIO_DOWNLOADS"
 wget -c "$URL_DISCORD"             -P "$DIRETORIO_DOWNLOADS"
-wget -c "$URL_DOCKER"              -P "$DIRETORIO_DOWNLOADS"
 wget -c "$URL_HYPER"               -P "$DIRETORIO_DOWNLOADS"
 wget -c "$URL_MONGODB_COMPASS"     -P "$DIRETORIO_DOWNLOADS"
 wget -c "$URL_OBINS_KIT"           -P "$DIRETORIO_DOWNLOADS"
@@ -251,6 +230,8 @@ echo \
   sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 sudo apt-get update
 sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+wget -c "$URL_DOCKER"     -P "$DIRETORIO_DOWNLOADS"
 }
 
 # r_install() {}
@@ -269,18 +250,13 @@ apt_update -y
 flatpak update -y
 sudo apt autoclean -y
 sudo apt autoremove -y
-nautilus -q
 }
 
 # -------------------------------------------------------------------------------- #
 # -------------------------------EXECUÇÃO----------------------------------------- #
 
-travas_apt
 testes_internet
-travas_apt
 apt_update
-travas_apt
-add_archi386
 just_apt_update
 install_debs
 install_flatpaks
